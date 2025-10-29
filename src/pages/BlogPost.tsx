@@ -1,5 +1,5 @@
 import { useParams, Link, Navigate } from "react-router-dom";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -16,10 +16,37 @@ const BlogPost = () => {
 
   return (
     <>
+      {/* ✅ SEO Meta Tags */}
       <Helmet>
-        <title>{post.title} - MindPeace Blog</title>
-        <meta name="description" content={post.description} />
+        <title>{post.title} | MindPeace Zen Space</title>
+        <meta
+          name="description"
+          content={post.description || "Mindfulness and wellbeing insights."}
+        />
         <meta name="keywords" content={post.seo.join(", ")} />
+        <link
+          rel="canonical"
+          href={`https://mindpeace-zen-space.vercel.app/blog/${post.id}`}
+        />
+
+        {/* ✅ Open Graph (for social media) */}
+        <meta
+          property="og:title"
+          content={`${post.title} | MindPeace Zen Space`}
+        />
+        <meta
+          property="og:description"
+          content={post.description || "Explore mindfulness and self-care blogs."}
+        />
+        <meta
+          property="og:image"
+          content={`https://mindpeace-zen-space.vercel.app${post.image}`}
+        />
+        <meta property="og:type" content="article" />
+        <meta
+          property="og:url"
+          content={`https://mindpeace-zen-space.vercel.app/blog/${post.id}`}
+        />
       </Helmet>
 
       <div className="min-h-screen flex flex-col">
@@ -28,6 +55,7 @@ const BlogPost = () => {
         <main className="flex-1">
           <article className="py-12 px-4">
             <div className="container mx-auto max-w-4xl">
+              {/* Back Button */}
               <Link to="/blog">
                 <Button variant="ghost" className="mb-6">
                   <ArrowLeft className="w-4 h-4 mr-2" />
@@ -35,6 +63,7 @@ const BlogPost = () => {
                 </Button>
               </Link>
 
+              {/* Blog Header */}
               <div className="mb-8 animate-fade-in">
                 <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
                   {post.title}
@@ -51,6 +80,7 @@ const BlogPost = () => {
                 </div>
               </div>
 
+              {/* Featured Image */}
               <div className="aspect-video overflow-hidden rounded-lg mb-8 animate-fade-in">
                 <img
                   src={post.image}
@@ -59,14 +89,19 @@ const BlogPost = () => {
                 />
               </div>
 
+              {/* Blog Content */}
               <div className="prose prose-lg max-w-none animate-fade-in">
-                {post.content.split('\n\n').map((paragraph, index) => (
-                  <p key={index} className="mb-4 text-foreground leading-relaxed">
+                {post.content.split("\n\n").map((paragraph, index) => (
+                  <p
+                    key={index}
+                    className="mb-4 text-foreground leading-relaxed"
+                  >
                     {paragraph}
                   </p>
                 ))}
               </div>
 
+              {/* Tags */}
               <div className="mt-12 pt-8 border-t border-border">
                 <div className="flex flex-wrap gap-2">
                   {post.seo.map((tag, index) => (
@@ -74,12 +109,13 @@ const BlogPost = () => {
                       key={index}
                       className="px-3 py-1 bg-accent text-accent-foreground rounded-full text-sm"
                     >
-                      #{tag.replace(/\s+/g, '')}
+                      #{tag.replace(/\s+/g, "")}
                     </span>
                   ))}
                 </div>
               </div>
 
+              {/* Read More Button */}
               <div className="mt-8">
                 <Link to="/blog">
                   <Button variant="outline" className="w-full md:w-auto">
@@ -99,3 +135,4 @@ const BlogPost = () => {
 };
 
 export default BlogPost;
+
